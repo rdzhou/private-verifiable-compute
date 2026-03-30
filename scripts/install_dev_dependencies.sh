@@ -57,7 +57,7 @@ install_dep_libs() {
     exit 1
   fi
   $SUDO apt-get update && \
-  $SUDO apt-get install -y libcurl4-openssl-dev libtss2-dev libsqlite3-dev libclang-dev pkg-config
+  $SUDO apt-get install -y libcurl4-openssl-dev libtss2-dev libsqlite3-dev libclang-dev pkg-config gettext-base
   echo "Done."
 }
 
