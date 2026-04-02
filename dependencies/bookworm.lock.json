@@ -34,9 +34,9 @@
 					"version": "1.5.4+dfsg2-5"
 				},
 				{
-					"key": "libssl3_3.0.18-1_deb12u1_amd64",
+					"key": "libssl3_3.0.18-1_deb12u2_amd64",
 					"name": "libssl3",
-					"version": "3.0.18-1~deb12u1"
+					"version": "3.0.18-1~deb12u2"
 				},
 				{
 					"key": "libssh2-1_1.10.0-3-p-b1_amd64",
@@ -64,9 +64,9 @@
 					"version": "2:6.2.1+dfsg1-1.1"
 				},
 				{
-					"key": "libgnutls30_3.7.9-2-p-deb12u5_amd64",
+					"key": "libgnutls30_3.7.9-2-p-deb12u6_amd64",
 					"name": "libgnutls30",
-					"version": "3.7.9-2+deb12u5"
+					"version": "3.7.9-2+deb12u6"
 				},
 				{
 					"key": "libunistring2_1.0-2_amd64",
@@ -236,13 +236,13 @@
 		{
 			"arch": "amd64",
 			"dependencies": [],
-			"key": "libssl3_3.0.18-1_deb12u1_amd64",
+			"key": "libssl3_3.0.18-1_deb12u2_amd64",
 			"name": "libssl3",
-			"sha256": "4eaee9db5a113b991a72eefe41965400a1efc97a560678edb5ddd978ccc8b083",
+			"sha256": "ed44f11b74763cded2ad406f4de4d585ea27b0ce6377e7c8d98c2ddf2ed35cb3",
 			"urls": [
-				"https://deb.debian.org/debian/pool/main/o/openssl/libssl3_3.0.18-1~deb12u1_amd64.deb"
+				"https://security.debian.org/debian-security/pool/updates/main/o/openssl/libssl3_3.0.18-1~deb12u2_amd64.deb"
 			],
-			"version": "3.0.18-1~deb12u1"
+			"version": "3.0.18-1~deb12u2"
 		},
 		{
 			"arch": "amd64",
@@ -302,13 +302,13 @@
 		{
 			"arch": "amd64",
 			"dependencies": [],
-			"key": "libgnutls30_3.7.9-2-p-deb12u5_amd64",
+			"key": "libgnutls30_3.7.9-2-p-deb12u6_amd64",
 			"name": "libgnutls30",
-			"sha256": "fca04ed22e0a38861ae45142a59ba5a09362d949677bab6a4992aa328464b13b",
+			"sha256": "10deacd86b6113c0cd679491aaf7b3416365ef407e56fe93d6009710a08811de",
 			"urls": [
-				"https://security.debian.org/debian-security/pool/updates/main/g/gnutls28/libgnutls30_3.7.9-2+deb12u5_amd64.deb"
+				"https://security.debian.org/debian-security/pool/updates/main/g/gnutls28/libgnutls30_3.7.9-2+deb12u6_amd64.deb"
 			],
-			"version": "3.7.9-2+deb12u5"
+			"version": "3.7.9-2+deb12u6"
 		},
 		{
 			"arch": "amd64",
@@ -642,9 +642,9 @@
 					"version": "1.5.4+dfsg2-5"
 				},
 				{
-					"key": "libssl3_3.0.18-1_deb12u1_amd64",
+					"key": "libssl3_3.0.18-1_deb12u2_amd64",
 					"name": "libssl3",
-					"version": "3.0.18-1~deb12u1"
+					"version": "3.0.18-1~deb12u2"
 				},
 				{
 					"key": "liblzma5_5.4.1-1_amd64",
@@ -757,9 +757,9 @@
 					"version": "2:6.2.1+dfsg1-1.1"
 				},
 				{
-					"key": "libgnutls30_3.7.9-2-p-deb12u5_amd64",
+					"key": "libgnutls30_3.7.9-2-p-deb12u6_amd64",
 					"name": "libgnutls30",
-					"version": "3.7.9-2+deb12u5"
+					"version": "3.7.9-2+deb12u6"
 				},
 				{
 					"key": "libunistring2_1.0-2_amd64",
@@ -847,9 +847,9 @@
 					"version": "1.0.9-2+b6"
 				},
 				{
-					"key": "libssl-dev_3.0.18-1_deb12u1_amd64",
+					"key": "libssl-dev_3.0.18-1_deb12u2_amd64",
 					"name": "libssl-dev",
-					"version": "3.0.18-1~deb12u1"
+					"version": "3.0.18-1~deb12u2"
 				},
 				{
 					"key": "libjson-c-dev_0.16-2_amd64",
@@ -1269,13 +1269,13 @@
 		{
 			"arch": "amd64",
 			"dependencies": [],
-			"key": "libssl-dev_3.0.18-1_deb12u1_amd64",
+			"key": "libssl-dev_3.0.18-1_deb12u2_amd64",
 			"name": "libssl-dev",
-			"sha256": "81fc8d4529f0c0224540c11ff6c0cee75280a487877fb7dc315e5933d1500ed0",
+			"sha256": "c81978f238e38d1f254332a5deccc5c8044b11d561e4c008b492292bea5cf9f6",
 			"urls": [
-				"https://deb.debian.org/debian/pool/main/o/openssl/libssl-dev_3.0.18-1~deb12u1_amd64.deb"
+				"https://security.debian.org/debian-security/pool/updates/main/o/openssl/libssl-dev_3.0.18-1~deb12u2_amd64.deb"
 			],
-			"version": "3.0.18-1~deb12u1"
+			"version": "3.0.18-1~deb12u2"
 		},
 		{
 			"arch": "amd64",

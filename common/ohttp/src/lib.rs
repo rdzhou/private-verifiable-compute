@@ -18,6 +18,7 @@ pub use bhttp::{Message, Mode};
 use bytes::Bytes;
 use futures::stream::Stream;
 pub use ohttp::Error;
+// pub use ohttp::Error;
 pub use ohttp::{ClientRequest, ClientResponse, KeyConfig};
 use reqwest::IntoUrl;
 use reqwest::header::HeaderMap;

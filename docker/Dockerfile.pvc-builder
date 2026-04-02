@@ -1,0 +1,35 @@
+FROM debian:bookworm-slim@sha256:74d56e3931e0d5a1dd51f8c8a2466d21de84a271cd3b5a733b803aa91abf4421
+
+RUN printf '%s\n' \
+  "deb     [check-valid-until=no] http://snapshot.debian.org/archive/debian/20251201T000000Z/ bookworm main" \
+  "deb-src [check-valid-until=no] http://snapshot.debian.org/archive/debian/20251201T000000Z/ bookworm main" \
+  "deb     [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/20251201T000000Z/ bookworm-security main" \
+  "deb-src [check-valid-until=no] http://snapshot.debian.org/archive/debian-security/20251201T000000Z/ bookworm-security main" \
+  > /etc/apt/sources.list
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    curl \
+    gnupg \
+    build-essential \
+    pkg-config \
+    libssl-dev \
+    unzip \
+    zip \
+    git \
+    python3 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install Bazelisk
+RUN curl -sL "https://github.com/bazelbuild/bazelisk/releases/download/v1.28.1/bazelisk-linux-amd64" -o /usr/local/bin/bazel \
+    && chmod +x /usr/local/bin/bazel
+
+WORKDIR /workspace
+
+# Install dev dependencies
+COPY scripts/install_dev_dependencies.sh /workspace/scripts/install_dev_dependencies.sh
+RUN /bin/bash /workspace/scripts/install_dev_dependencies.sh --pipeline && \
+    rm -f /workspace/scripts/install_dev_dependencies.sh
+
+ENTRYPOINT ["/bin/bash", "-c"]
+CMD ["cd /workspace && bazel build -c opt //pvc-client:pvc-client //pvc-identity-server:identity-server //pvc-ohttp-gateway:pvc-ohttp-gateway //pvc-ohttp-relay:pvc-ohttp-relay //pvc-tee-llm:pvc-tee-llm"]
