@@ -1,0 +1,63 @@
+# Copyright 2025 TikTok Inc. and/or its affiliates
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+load("@crates//:defs.bzl", "all_crate_deps")
+load("@rules_rust//rust:defs.bzl", "rust_library", "rust_test")
+
+package(default_visibility = ["//visibility:public"])
+
+rust_library(
+    name = "pvc_client_core",
+    srcs = ["src/lib.rs"],
+    crate_features = [
+        "attestation",
+        "noise",
+        "base64",
+    ],
+    edition = "2024",
+    proc_macro_deps = all_crate_deps(
+        proc_macro = True,
+    ),
+    deps = [
+        "//common/blind-rsa:blind_rsa",
+        "//common/identity",
+        "//common/noise",
+        "//common/ohttp:ohttp_wrap",
+        "//common/types",
+        "@crates//:anyhow",
+        "@crates//:base64",
+        "@crates//:bincode",
+        "@crates//:bytes",
+        "@crates//:futures",
+        "@crates//:futures-util",
+        "@crates//:hex",
+        "@crates//:p256",
+        "@crates//:rand",
+        "@crates//:rand_core",
+        "@crates//:reqwest",
+        "@crates//:serde",
+        "@crates//:serde_json",
+        "@crates//:sha2",
+        "@crates//:tokio",
+        "@crates//:tokio-util",
+        "@crates//:tracing",
+        "@crates//:uuid",
+        "@crates//:verifier",
+    ],
+)
+
+rust_test(
+    name = "pvc_client_core_test",
+    crate = ":pvc_client_core",
+)

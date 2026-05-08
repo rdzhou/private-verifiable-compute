@@ -1,0 +1,113 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "pvc.tee-llm.name" . }}
+  labels:
+    {{- include "pvc.tee-llm.labels" . | nindent 4 }}
+  namespace: {{ .Values.global.namespace }}
+spec:
+  {{- if not .Values.teeLlm.autoscaling.enabled }}
+  replicas: {{ .Values.teeLlm.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "pvc.tee-llm.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        {{- if eq .Values.platform "kata" }}
+        {{- with .Values.kata.gpuRuntime.annotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- end }}
+        {{- with .Values.teeLlm.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "pvc.tee-llm.labels" . | nindent 8 }}
+        {{- with .Values.teeLlm.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- if eq .Values.platform "kata" }}
+      runtimeClassName: {{ .Values.kata.gpuRuntime.runtimeClassName }}
+      {{- end }}
+      {{- with .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: "llm"
+          image: "{{ .Values.teeLlm.llmImage.repository }}:{{ .Values.teeLlm.llmImage.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: "IfNotPresent"
+          env:
+          - name: LD_LIBRARY_PATH
+            value: ${LD_LIBRARY_PATH}:/usr/local/nvidia/lib64
+          - name: LLM_MODEL
+            value: {{ .Values.teeLlm.llmModel }}
+          - name: LLM_PORT
+            value: {{ .Values.teeLlm.llmPort | quote }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.teeLlm.llmPort }}
+              protocol: TCP
+          livenessProbe:
+            {{- toYaml .Values.teeLlm.livenessProbe | nindent 12 }}
+          readinessProbe:
+            {{- toYaml .Values.teeLlm.readinessProbe | nindent 12 }}
+          command: ["/bin/sh", "-c"]
+          {{- with .Values.teeLlm.llmArgs }}
+          args:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- if eq .Values.platform "kata" }}
+            {{- toYaml .Values.kata.gpuRuntime.resources | nindent 12 }}
+            {{- else }}
+            {{- toYaml .Values.teeLlm.resources | nindent 12 }}
+            {{- end }}
+          {{- if eq .Values.platform "kata" }}
+          volumeMounts:
+            - name: cache-volume
+              mountPath: {{ .Values.kata.pvc.llm.mountPath }}
+            - name: shm
+              mountPath: /dev/shm
+          {{- else }}
+          {{- with .Values.teeLlm.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- end }}
+      volumes:
+        {{- if eq .Values.platform "kata" }}
+        - name: cache-volume
+          persistentVolumeClaim:
+            claimName: {{ include "pvc.tee-llm.name" . }}-pvc
+        - name: shm
+          emptyDir:
+            medium: Memory
+            sizeLimit: "4Gi"
+        {{- else }}
+        {{- with .Values.teeLlm.volumes }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- end }}
+      {{- if eq .Values.platform "gke" }}
+      {{- with .Values.teeLlm.gkeNodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- else }}
+      {{- with .Values.teeLlm.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- end }}
+      {{- with .Values.teeLlm.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.teeLlm.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

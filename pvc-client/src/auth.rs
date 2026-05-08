@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::client::PvcClient;
+use pvc_client_core::PvcClient;
 use rocket::State;
 use rocket::fs::NamedFile;
 use rocket::http::Status;

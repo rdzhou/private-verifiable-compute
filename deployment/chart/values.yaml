@@ -1,0 +1,230 @@
+# Deployment platform: "gke" or "kata"
+# Set by an environment overlay or deploy script.
+platform: ""
+
+global:
+  namespace: "default"
+  imagePullSecrets: []
+
+nameOverride: "pvc"
+fullnameOverride: "pvc"
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+oauth:
+  oauthType:
+  googleOauthClientId:
+
+privacyGateway:
+  seedSecret: ""
+  image:
+    repository: ""
+    pullPolicy: Always
+    tag: ""
+  service:
+    type: ClusterIP
+    port: 8000
+  urlScheme: "http"
+  replicaCount: 1
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    podAnnotations: {}
+    podLabels: {}
+  serviceAccount:
+    name: ""
+  securityContext: {}
+  podSecurityContext: {}
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: http
+    periodSeconds: 300
+  readinessProbe:
+    httpGet:
+      path: /health
+      port: http
+    periodSeconds: 300
+  resources: {}
+  volumes: []
+  volumeMounts: []
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+relay:
+  image:
+    repository: ""
+    pullPolicy: Always
+    tag: ""
+  service:
+    type: ClusterIP
+    port: 8787
+  urlScheme: "http"
+  replicaCount: 1
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    podAnnotations: {}
+    podLabels: {}
+  serviceAccount:
+    name: ""
+  securityContext: {}
+  podSecurityContext: {}
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: http
+    periodSeconds: 300
+  readinessProbe:
+    httpGet:
+      path: /health
+      port: http
+    periodSeconds: 300
+  resources: {}
+  volumes: []
+  volumeMounts: []
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+identityServer:
+  image:
+    repository: ""
+    pullPolicy: Always
+    tag: ""
+  service:
+    type: ClusterIP
+    port: 8000
+  urlScheme: "http"
+  replicaCount: 1
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    podAnnotations: {}
+    podLabels: {}
+  serviceAccount:
+    name: ""
+  securityContext: {}
+  podSecurityContext: {}
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: http
+  readinessProbe:
+    httpGet:
+      path: /health
+      port: http
+  resources: {}
+  volumes: []
+  volumeMounts: []
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+
+teeLlm:
+  image:
+    repository: ""
+    pullPolicy: Always
+    tag: ""
+  llmImage:
+    repository: "vllm/vllm-openai"
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  embeddingImage:
+    repository: "vllm/vllm-openai"
+    pullPolicy: IfNotPresent
+    tag: "latest"
+  service:
+    type: ClusterIP
+    port: 9000
+  urlScheme: "http"
+  replicaCount: 1
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    podAnnotations: {}
+    podLabels: {}
+  serviceAccount:
+    name: ""
+  securityContext:
+    privileged: true
+  podSecurityContext:
+    privileged: true
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: http
+    initialDelaySeconds: 200
+    periodSeconds: 300
+  readinessProbe:
+    httpGet:
+      path: /health
+      port: http
+    initialDelaySeconds: 200
+    periodSeconds: 300
+  resources: {}
+  volumes: []
+  volumeMounts: []
+  gkeNodeSelector: {}
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}
+  llmModel: ""
+  llmPort: 8000
+  embeddingModel: ""
+  embeddingPort: 8001
+  embeddingNdims: 0
+  llmMaxToken: 0
+  llmArgs: []
+  embeddingArgs: []
+
+client:
+  image:
+    repository: ""
+    pullPolicy: Always
+    tag: ""
+  service:
+    type: ClusterIP
+    port: 8083
+  urlScheme: "http"
+  replicaCount: 1
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    podAnnotations: {}
+    podLabels: {}
+  serviceAccount:
+    name: ""
+  securityContext: {}
+  podSecurityContext: {}
+  resources: {}
+  volumes: []
+  volumeMounts: []
+  nodeSelector: {}
+  tolerations: []
+  affinity: {}

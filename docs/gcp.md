@@ -77,8 +77,14 @@ bazel run //:push_<app>_image --action_env=namespace=<namespace-to-deploy>
 ```
 
 ### Deploy
+The GKE deploy flow requires a repo-root `.env` with `project_id` set.
+
 ```
-pushd deployment
-./deploy.sh --namespace=<namespace-to-deploy>
-popd
+./deployment/deploy.sh --platform=gke --namespace=<namespace-to-deploy>
+```
+
+To preview the rendered release without applying changes:
+
+```
+./deployment/deploy.sh --platform=gke --namespace=<namespace-to-deploy> --dry-run
 ```

@@ -34,9 +34,9 @@
 					"version": "1.5.4+dfsg2-5"
 				},
 				{
-					"key": "libssl3_3.0.18-1_deb12u2_amd64",
+					"key": "libssl3_3.0.19-1_deb12u2_amd64",
 					"name": "libssl3",
-					"version": "3.0.18-1~deb12u2"
+					"version": "3.0.19-1~deb12u2"
 				},
 				{
 					"key": "libssh2-1_1.10.0-3-p-b1_amd64",
@@ -236,13 +236,13 @@
 		{
 			"arch": "amd64",
 			"dependencies": [],
-			"key": "libssl3_3.0.18-1_deb12u2_amd64",
+			"key": "libssl3_3.0.19-1_deb12u2_amd64",
 			"name": "libssl3",
-			"sha256": "ed44f11b74763cded2ad406f4de4d585ea27b0ce6377e7c8d98c2ddf2ed35cb3",
+			"sha256": "d5b7d11bdb3b9cda3a90b4d9586ee1e90e79163473934d3927ce658bd17fd1ea",
 			"urls": [
-				"https://security.debian.org/debian-security/pool/updates/main/o/openssl/libssl3_3.0.18-1~deb12u2_amd64.deb"
+				"https://security.debian.org/debian-security/pool/updates/main/o/openssl/libssl3_3.0.19-1~deb12u2_amd64.deb"
 			],
-			"version": "3.0.18-1~deb12u2"
+			"version": "3.0.19-1~deb12u2"
 		},
 		{
 			"arch": "amd64",
@@ -642,9 +642,9 @@
 					"version": "1.5.4+dfsg2-5"
 				},
 				{
-					"key": "libssl3_3.0.18-1_deb12u2_amd64",
+					"key": "libssl3_3.0.19-1_deb12u2_amd64",
 					"name": "libssl3",
-					"version": "3.0.18-1~deb12u2"
+					"version": "3.0.19-1~deb12u2"
 				},
 				{
 					"key": "liblzma5_5.4.1-1_amd64",
@@ -847,9 +847,9 @@
 					"version": "1.0.9-2+b6"
 				},
 				{
-					"key": "libssl-dev_3.0.18-1_deb12u2_amd64",
+					"key": "libssl-dev_3.0.19-1_deb12u2_amd64",
 					"name": "libssl-dev",
-					"version": "3.0.18-1~deb12u2"
+					"version": "3.0.19-1~deb12u2"
 				},
 				{
 					"key": "libjson-c-dev_0.16-2_amd64",
@@ -1269,13 +1269,13 @@
 		{
 			"arch": "amd64",
 			"dependencies": [],
-			"key": "libssl-dev_3.0.18-1_deb12u2_amd64",
+			"key": "libssl-dev_3.0.19-1_deb12u2_amd64",
 			"name": "libssl-dev",
-			"sha256": "c81978f238e38d1f254332a5deccc5c8044b11d561e4c008b492292bea5cf9f6",
+			"sha256": "758e1f17726557c18eeb968c8f8cc09afdf81ae0321a5d73a7f35f41a9fb956c",
 			"urls": [
-				"https://security.debian.org/debian-security/pool/updates/main/o/openssl/libssl-dev_3.0.18-1~deb12u2_amd64.deb"
+				"https://security.debian.org/debian-security/pool/updates/main/o/openssl/libssl-dev_3.0.19-1~deb12u2_amd64.deb"
 			],
-			"version": "3.0.18-1~deb12u2"
+			"version": "3.0.19-1~deb12u2"
 		},
 		{
 			"arch": "amd64",

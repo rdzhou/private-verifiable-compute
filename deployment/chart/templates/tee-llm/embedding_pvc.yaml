@@ -1,0 +1,14 @@
+{{- if eq .Values.platform "kata" }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "pvc.tee-embedding.name" . }}-pvc
+  namespace: {{ .Values.global.namespace }}
+spec:
+  accessModes:
+    {{- toYaml .Values.kata.pvc.accessModes | nindent 4 }}
+  storageClassName: {{ .Values.kata.pvc.storageClassName }}
+  resources:
+    requests:
+      storage: {{ .Values.kata.pvc.embedding.storage }}
+{{- end }}

@@ -1,0 +1,134 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "pvc.tee-server.name" . }}
+  labels:
+    {{- include "pvc.tee-server.labels" . | nindent 4 }}
+  namespace: {{ .Values.global.namespace }}
+spec:
+  {{- if not .Values.teeLlm.autoscaling.enabled }}
+  replicas: {{ .Values.teeLlm.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "pvc.tee-server.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        {{- if eq .Values.platform "kata" }}
+        {{- with .Values.kata.runtime.annotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+        {{- end }}
+        {{- with .Values.teeLlm.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "pvc.tee-server.labels" . | nindent 8 }}
+        {{- with .Values.teeLlm.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- if eq .Values.platform "kata" }}
+      runtimeClassName: {{ .Values.kata.runtime.runtimeClassName }}
+      {{- end }}
+      {{- with .Values.global.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "pvc.tee-server.serviceAccountName" . }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.teeLlm.securityContext | nindent 12 }}
+          image: "{{ .Values.teeLlm.image.repository }}:{{ .Values.teeLlm.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.teeLlm.image.pullPolicy }}
+          env:
+          - name: IDENTITY_SERVER_URL
+            valueFrom:
+              configMapKeyRef:
+                name: pvc-configmap
+                key: identity_server_url
+          - name: RUST_BACKTRACE
+            value: "1"
+          - name: LLM_ENDPOINT
+            valueFrom:
+              configMapKeyRef:
+                name: pvc-configmap
+                key: llm_url
+          - name: LLM_MODEL
+            value: {{ .Values.teeLlm.llmModel }}
+          - name: EMBEDDING_MODEL
+            value: {{ .Values.teeLlm.embeddingModel | quote }}
+          - name: EMBEDDING_ENDPOINT
+            valueFrom:
+              configMapKeyRef:
+                name: pvc-configmap
+                key: embedding_url
+          - name: EMBEDDING_NDIMS
+            value: {{ .Values.teeLlm.embeddingNdims | quote }}
+          - name: LLM_MAX_TOKEN
+            value: {{ .Values.teeLlm.llmMaxToken | quote }}
+          - name: LD_LIBRARY_PATH
+            value: ${LD_LIBRARY_PATH}:/usr/local/nvidia/lib64
+          ports:
+            - name: http
+              containerPort: {{ .Values.teeLlm.service.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 300
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            periodSeconds: 300
+          {{- if eq .Values.platform "kata" }}
+          volumeMounts:
+            - name: shm
+              mountPath: /dev/shm
+          {{- else }}
+          {{- with .Values.teeLlm.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- end }}
+          resources:
+            {{- if eq .Values.platform "kata" }}
+            {}
+            {{- else }}
+            {{- toYaml .Values.teeLlm.resources | nindent 12 }}
+            {{- end }}
+      {{- if eq .Values.platform "kata" }}
+      volumes:
+        - name: shm
+          emptyDir:
+            medium: Memory
+            sizeLimit: "4Gi"
+      {{- else }}
+      {{- with .Values.teeLlm.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- end }}
+      {{- if eq .Values.platform "gke" }}
+      {{- with .Values.teeLlm.gkeNodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- else }}
+      {{- with .Values.teeLlm.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- end }}
+      {{- with .Values.teeLlm.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.teeLlm.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

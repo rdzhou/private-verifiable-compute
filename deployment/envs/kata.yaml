@@ -1,0 +1,39 @@
+platform: kata
+
+teeLlm:
+  llmModel: Qwen/Qwen3.6-35B-A3B
+  embeddingModel: Qwen/Qwen3-Embedding-8B
+  embeddingNdims: 4096
+  llmMaxToken: 28672
+  llmArgs:
+    - "vllm serve $LLM_MODEL --host \"::\" --port $LLM_PORT --trust-remote-code --reasoning-parser deepseek_r1 --stream-interval 5 --max-model-len 102400 --max-num-seqs 64"
+  embeddingArgs:
+    - "vllm serve $EMBEDDING_MODEL --host \"::\" --port $EMBEDDING_PORT"
+
+kata:
+  gpuRuntime:
+    runtimeClassName: kata-qemu-nvidia-gpu-snp
+    annotations:
+      io.katacontainers.config.hypervisor.default_vcpus: "12"
+      io.katacontainers.config.hypervisor.kernel_params: "nvrc.smi.srs=1 nvrc.log=trace"
+      io.katacontainers.config.hypervisor.default_memory: "48960"
+    resources:
+      limits:
+        nvidia.com/pgpu: "1"
+
+  runtime:
+    runtimeClassName: kata-qemu-snp
+    annotations:
+      io.katacontainers.config.hypervisor.default_vcpus: "4"
+      io.katacontainers.config.hypervisor.default_memory: "10240"
+
+  pvc:
+    storageClassName: longhorn
+    accessModes:
+      - ReadWriteOnce
+    llm:
+      storage: 300Gi
+      mountPath: /root/.cache/huggingface
+    embedding:
+      storage: 100Gi
+      mountPath: /root/.cache/huggingface

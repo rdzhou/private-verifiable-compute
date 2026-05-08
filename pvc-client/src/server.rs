@@ -12,16 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use crate::client::Claim;
-use crate::client::PvcClient;
-use types::ReportData;
+use pvc_client_core::{Claim, PvcClient};
 
 use crate::resp::ServerResponse;
 use anyhow::Result;
-use base64::Engine;
-use base64::prelude::BASE64_STANDARD;
 use futures::StreamExt;
-use reqwest::header::{HeaderMap, HeaderName, HeaderValue};
 use rocket::data::{Data, ToByteUnit};
 use rocket::form::Form;
 use rocket::fs::TempFile;
@@ -29,10 +24,11 @@ use rocket::http::Status;
 use rocket::response::stream::TextStream;
 use rocket::serde::{Deserialize, Serialize};
 use rocket::{Request, State, request::FromRequest};
-use std::str::FromStr;
 use tokio::io::AsyncReadExt;
+use types::http::reqwest::header::{HeaderMap, HeaderName, HeaderValue};
 
 use serde_json::{Value, json};
+use std::str::FromStr;
 use std::sync::Arc;
 use tracing::{error, info};
 
@@ -202,26 +198,5 @@ fn extract_cpu(claims: &Claim) -> Value {
     match gpu {
         Some(gpu) => json!({ "cpu": cpu, "gpu": gpu }),
         None => json!({ "cpu": cpu}),
-    }
-}
-
-pub fn extract_report_data(claims: &Claim) -> ReportData {
-    claims
-        .iter()
-        .for_each(|(value, key)| info!("{}:{}", key, value.to_string()));
-    let cpu = claims
-        .iter()
-        .find(|(_val, key)| key == "cpu")
-        .map(|(val, _key)| val)
-        .unwrap();
-    let report_data_str = cpu["report_data"].as_str().unwrap();
-    info!("{}", report_data_str);
-    match hex::decode(report_data_str) {
-        Ok(r) => r.try_into().unwrap(),
-        Err(_) => BASE64_STANDARD
-            .decode(report_data_str)
-            .unwrap()
-            .try_into()
-            .unwrap(),
     }
 }

@@ -46,6 +46,8 @@ transparency.
 - [Build Private Verifiable Compute](docs/build.md)
 - [Try PVC with Minikube](docs/minikube.md)
 - [Deploy PVC on Google Cloud Platform](docs/gcp.md)
+- [Deploy PVC on Confidential Containers](docs/coco.md)
+- [Use the PVC CLI](docs/pvc-cli.md)
 
 # License
 

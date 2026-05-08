@@ -95,7 +95,8 @@ impl ChatCompletionHelper {
             req.model = llm_model;
         }
 
-        req.messages.push(chat_completion::ChatCompletionMessage {
+        let mut system_prompt_messages = Vec::new();
+        system_prompt_messages.push(chat_completion::ChatCompletionMessage {
             role: chat_completion::MessageRole::system,
             content: chat_completion::Content::Text(system_prompt),
             name: None,
@@ -110,7 +111,7 @@ impl ChatCompletionHelper {
                 &serde_json::json!({"documents": rag}),
             )?;
             warn!("rag doc {}", h);
-            req.messages.push(chat_completion::ChatCompletionMessage {
+            system_prompt_messages.push(chat_completion::ChatCompletionMessage {
                 role: chat_completion::MessageRole::system,
                 content: chat_completion::Content::Text(h),
                 name: None,
@@ -118,6 +119,9 @@ impl ChatCompletionHelper {
                 tool_call_id: None,
             });
         };
+
+        system_prompt_messages.extend(req.messages);
+        req.messages = system_prompt_messages;
 
         let mut payload = serde_json::to_value(req)?;
         if let Some(obj) = payload.as_object_mut() {
