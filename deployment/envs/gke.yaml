@@ -1,0 +1,53 @@
+platform: gke
+
+privacyGateway:
+  service:
+    type: LoadBalancer
+
+relay:
+  service:
+    type: LoadBalancer
+
+identityServer:
+  service:
+    type: LoadBalancer
+
+client:
+  service:
+    type: LoadBalancer
+
+teeLlm:
+  llmModel: Qwen/Qwen3.6-35B-A3B
+  embeddingModel: Qwen/Qwen3-Embedding-8B
+  embeddingNdims: 4096
+  llmMaxToken: 28672
+  llmArgs:
+    - "vllm serve $LLM_MODEL --host \"::\" --port $LLM_PORT --trust-remote-code --reasoning-parser deepseek_r1 --stream-interval 5 --max-model-len 102400 --max-num-seqs 64"
+  embeddingArgs:
+    - "vllm serve $EMBEDDING_MODEL --host \"::\" --port $EMBEDDING_PORT"
+  resources:
+    limits:
+      nvidia.com/gpu: 1
+  volumes:
+    - name: dev
+      hostPath:
+        path: /dev
+    - name: sys
+      hostPath:
+        path: /sys
+    - name: run
+      hostPath:
+        path: /run
+  volumeMounts:
+    - name: dev
+      mountPath: /dev
+    - name: sys
+      mountPath: /sys
+    - name: run
+      mountPath: /run
+  gkeNodeSelector:
+    cloud.google.com/gke-accelerator: nvidia-h100-80gb
+  tolerations:
+    - key: "nvidia.com/gpu"
+      operator: "Exists"
+      effect: "NoSchedule"

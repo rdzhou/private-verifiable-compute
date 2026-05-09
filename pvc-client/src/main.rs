@@ -16,12 +16,10 @@
 extern crate rocket;
 
 mod auth;
-mod client;
-mod key;
 mod resp;
 mod server;
 
-use client::PvcClient;
+use pvc_client_core::{PvcClient, create_or_get_encryption_key};
 use rocket::fs::FileServer;
 use std::sync::Arc;
 use tokio::sync::RwLock;
@@ -38,7 +36,7 @@ async fn rocket() -> _ {
         .with_env_filter(EnvFilter::from_default_env())
         .init();
 
-    let key = key::create_or_get_encryption_key().unwrap();
+    let key = create_or_get_encryption_key().unwrap();
     let mut client = PvcClient::new(
         get_env_or_default("IDENTITY_SERVER_URL", "http://localhost:8000"),
         get_env_or_default("GATEWAY_URL", "http://localhost:8082"),

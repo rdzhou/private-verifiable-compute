@@ -1,0 +1,29 @@
+teeLlm:
+  llmModel: qwen3:0.6b
+  embeddingModel: qwen3-embedding:0.6b
+  llmImage:
+    repository: ollama/ollama
+  embeddingImage:
+    repository: ollama/ollama
+  llmArgs:
+    - "export OLLAMA_HOST=0.0.0.0:8000; ollama serve & PID=$!; sleep 3; ollama pull qwen3:0.6b; wait $PID"
+  embeddingArgs:
+    - "export OLLAMA_HOST=0.0.0.0:8001; ollama serve & PID=$!; sleep 3; ollama pull qwen3-embedding:0.6b; wait $PID"
+  embeddingNdims: 1024
+  llmMaxToken: 8192
+
+client:
+  service:
+    type: NodePort
+
+identityServer:
+  service:
+    type: NodePort
+
+privacyGateway:
+  service:
+    type: NodePort
+
+relay:
+  service:
+    type: NodePort

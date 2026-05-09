@@ -67,10 +67,16 @@ You can close the proxy after the docker push.
 Deploy PVC to minikube.
 
 ```
-pushd deployment/minikube
-./deploy.sh
-popd
+./deployment/deploy.sh --platform=minikube
 ```
+
+To preview the rendered release without applying changes:
+
+```
+./deployment/deploy.sh --platform=minikube --dry-run
+```
+
+`--dry-run` does not apply changes, but it still talks to Helm and the current cluster context.
 
 ## Check The Result
 You can check the logs of client to make sure all the services working properly. The client pod is a job and it should be completed after several restarts. 
